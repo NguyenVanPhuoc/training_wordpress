@@ -61,5 +61,52 @@ endif;
 
 add_action( 'wp_enqueue_scripts', 'twentytwentytwo_styles' );
 
+// Add menu item to admin management page
+function add_custom_menu_item() {
+    add_menu_page(
+        'Phuoc-Vlog',
+        'Phuoc Vlog',
+        'manage_options',
+        'slug-vlog',
+        'render_trang_custom_with_filter', 
+        'dashicons-admin-page',
+        6
+    );
+}
+add_action('admin_menu', 'add_custom_menu_item');
+
+// Wrapper function to render custom page content with filter
+function render_trang_custom_with_filter() {
+    $title = 'Hook action';
+    $title = apply_filters('custom_title', $title);
+    render_trang_custom($title); // Call the render_page_custom function with the $title changed
+}
+
+// Function to render the content of a custom page
+function render_trang_custom($title) {
+    echo '<div class="wrap">';
+    echo '<h2>Xin chào CO2 thân yêu :)</h2>';
+    echo '<p>Mình là <strong>Phước đẹp trai</strong> đây!</p>';
+    echo '<p>Đây là bài tập của mình về '.$title.'</p>';
+    echo '</div>';
+}
+
+function used_filter_custom_title($title) {
+    $title = 'Hook filter';
+    return $title;
+}
+// Register filters
+add_filter('custom_title', 'used_filter_custom_title', 10, 1);
+
+// Function to change text
+function change_media_text($translated_text, $text) {
+
+    if ($text === 'Media') {
+        $translated_text = 'Âm nhạc CO2';
+    }
+    return $translated_text;
+}
+add_filter('gettext', 'change_media_text', 20, 2);
+
 // Add block patterns
 require get_template_directory() . '/inc/block-patterns.php';
