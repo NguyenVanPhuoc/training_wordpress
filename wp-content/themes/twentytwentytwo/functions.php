@@ -75,11 +75,32 @@ function add_custom_menu_item() {
 }
 add_action('admin_menu', 'add_custom_menu_item');
 
+function get_all_posts() {
+    $args = array(
+        'post_type' => 'post',
+        'posts_per_page' => -1,
+    );
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            echo '<h2>' . get_the_title() . '</h2>';
+            echo '<div class="post-content">' . get_the_content() . '</div>';
+        }
+        wp_reset_postdata();
+    } else {
+        echo 'Không có bài viết nào được tìm thấy.';
+    }
+}
+
 // Wrapper function to render custom page content with filter
 function render_trang_custom_with_filter() {
     $title = 'Hook action';
     $title = apply_filters('custom_title', $title);
     render_trang_custom($title); // Call the render_page_custom function with the $title changed
+	get_all_posts();
 }
 
 // Function to render the content of a custom page
